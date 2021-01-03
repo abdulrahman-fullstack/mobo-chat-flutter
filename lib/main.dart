@@ -1,7 +1,15 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'Screens/Home/Home.dart';
+import 'package:mobochat/Screens/Login/login.dart';
+import 'Screens/Home/home.dart';
+import 'constants.dart';
 
-void main() {
+Future main() async {
+  // Initializing Widgets
+  WidgetsFlutterBinding.ensureInitialized();
+  // Initializing Firebase App
+  await Firebase.initializeApp();
+
   runApp(App());
 }
 
@@ -10,13 +18,35 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MoBo Chat',
-      theme: ThemeData(
-        brightness: Brightness.dark,
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
-      home: Home(),
+      theme: _theme(),
+      onGenerateRoute: _routes(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+
+  RouteFactory _routes() {
+    return (settings) {
+      // final Map<String, dynamic> arguments = settings.arguments;
+      Widget screen;
+      switch (settings.name) {
+        case LoginRoute:
+          screen = Login();
+          break;
+        case HomeRoute:
+          screen = Home();
+          break;
+        default:
+          return null;
+      }
+      return MaterialPageRoute(builder: (BuildContext context) => screen);
+    };
+  }
+
+  ThemeData _theme() {
+    return ThemeData(
+      brightness: Brightness.dark,
+      primarySwatch: Colors.blue,
+      visualDensity: VisualDensity.adaptivePlatformDensity,
     );
   }
 }

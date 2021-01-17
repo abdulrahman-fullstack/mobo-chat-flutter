@@ -6,17 +6,16 @@ class AuthService {
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Observable<UserCredential> user;
-  PublishSubject loading;
+  Stream<User> user;
+  // PublishSubject loading;
 
   AuthService() {
-    // user = Observable(_auth.);
-    // user
+    // user = Observable(_auth.currentUser.uid);
+    user = _auth.authStateChanges();
   }
 
   Future<User> googleSignIn() async {
-    // loading.add(true);
-
+    // Trigger Google Signin
     GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     if (googleUser != null) {
       GoogleSignInAuthentication googleAuth = await googleUser.authentication;
@@ -32,21 +31,15 @@ class AuthService {
     }
   }
 
-  signOut() async {
+  Future<void> signOut() async {
     await _googleSignIn.signOut();
-    await _auth.signOut();
+    return await _auth.signOut();
   }
 
-  Future<UserCredential> guestSignIn() async {
-    loading.add(true);
-
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    final GoogleAuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-      accessToken: googleAuth.accessToken,
-    );
-    return await _auth.signInWithCredential(credential);
+  Future<User> guestSignIn() async {
+    // Singing In Anonymously
+    UserCredential credential = await _auth.signInAnonymously();
+    return credential.user; // returning the user
   }
 }
 

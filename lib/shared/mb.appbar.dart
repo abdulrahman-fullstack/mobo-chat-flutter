@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MBAppBar extends StatelessWidget with PreferredSizeWidget {
-  @override
   final Size preferredSize;
 
   final Color backgroundColor;

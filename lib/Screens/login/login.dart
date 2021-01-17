@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mobochat/constants.dart';
-import 'package:mobochat/services/auth.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import '../../constants.dart';
+import '../../services/auth.dart';
 
 class Login extends StatelessWidget {
-  final AuthService authService = AuthService();
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -16,8 +17,8 @@ class Login extends StatelessWidget {
           _logoWidget(),
           _loginButton(
               "LOGIN WITH GOOGLE", () => _onGoogleLogin(context), true),
-          _loginButton(
-              "Continue as Guest", _onLoginPress, false, 250.0, Colors.white10),
+          // _loginButton("Login with username", () => _onLoginPress(context), false,
+          //     250.0, Colors.white10),
         ],
       ),
     ));
@@ -88,18 +89,26 @@ class Login extends StatelessWidget {
     );
   }
 
-  _onLoginPress() {
+  _validateUserAndNavigatePage(User user, BuildContext context) {
+    if (user != null)
+      Navigator.pushReplacementNamed(context, HomeRoute);
+    else
+      print("No user Logged In");
+  }
+
+  _onLoginPress(BuildContext context) {
     print("Logging in user");
+    // Signing In the User Ananonymosly
+    _authService
+        .guestSignIn()
+        .then((user) => _validateUserAndNavigatePage(user, context));
   }
 
   _onGoogleLogin(BuildContext context) {
     print("Logging User on Google");
     // authService.loading.add(true);
-    authService.googleSignIn().then((user) => {
-          if (user != null)
-            Navigator.pushNamed(context, HomeRoute)
-          else
-            print("No user Logged In")
-        });
+    _authService
+        .googleSignIn()
+        .then((user) => _validateUserAndNavigatePage(user, context));
   }
 }

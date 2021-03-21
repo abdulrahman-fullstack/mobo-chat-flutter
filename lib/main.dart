@@ -3,7 +3,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
-import 'package:mobochat/services/auth.dart';
+import 'package:mobochat/models/conversation_model.dart';
+import 'package:mobochat/services/auth_service.dart';
+import 'package:mobochat/services/chat_service.dart';
 import 'package:provider/provider.dart';
 import 'routes.dart';
 
@@ -22,6 +24,9 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         StreamProvider<User>.value(value: AuthService().user),
+        StreamProvider<List<UserConversation>>.value(
+          value: ChatService().conversations,
+        )
       ],
       child: MaterialApp(
         navigatorObservers: [

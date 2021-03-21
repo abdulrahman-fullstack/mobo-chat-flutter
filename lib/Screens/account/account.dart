@@ -5,7 +5,7 @@ import 'package:mobochat/constants.dart';
 import 'package:provider/provider.dart';
 
 import 'package:mobochat/shared/mb.appbar.dart';
-import '../../services/auth.dart';
+import '../../services/auth_service.dart';
 
 class Account extends StatelessWidget {
   final AuthService _authService = AuthService();

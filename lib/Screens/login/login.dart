@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:mobochat/services/chat_service.dart';
 import '../../constants.dart';
-import '../../services/auth.dart';
+import '../../services/auth_service.dart';
 
 class Login extends StatelessWidget {
   final AuthService _authService = AuthService();
@@ -90,19 +90,20 @@ class Login extends StatelessWidget {
   }
 
   _validateUserAndNavigatePage(User user, BuildContext context) {
-    if (user != null)
+    if (user != null) {
+      ChatService().getConversations(user.uid);
       Navigator.pushReplacementNamed(context, HomeRoute);
-    else
+    } else
       print("No user Logged In");
   }
 
-  _onLoginPress(BuildContext context) {
-    print("Logging in user");
-    // Signing In the User Ananonymosly
-    _authService
-        .guestSignIn()
-        .then((user) => _validateUserAndNavigatePage(user, context));
-  }
+  // _onLoginPress(BuildContext context) {
+  //   print("Logging in user");
+  //   // Signing In the User Ananonymosly
+  //   _authService
+  //       .guestSignIn()
+  //       .then((user) => _validateUserAndNavigatePage(user, context));
+  // }
 
   _onGoogleLogin(BuildContext context) {
     print("Logging User on Google");

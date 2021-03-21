@@ -2,8 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:mobochat/constants.dart';
-import 'package:mobochat/services/auth.dart';
-import 'package:provider/provider.dart';
 
 class SplashScreen extends StatelessWidget {
   @override
